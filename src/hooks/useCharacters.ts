@@ -1,11 +1,11 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { fetchCharacters, CharactersResponse } from '../api/api'
 
-export function useCharacters(page: number): UseQueryResult<CharactersResponse, Error> {
+export function useCharacters(page: number, name?: string) {
   return useQuery<CharactersResponse, Error>({
-    queryKey: ['characters', page],
-    queryFn: () => fetchCharacters(page),
-    keepPreviousData: true,
-    staleTime: 1000 * 60 * 2,
+    queryKey: ['characters', page, name], // include name in query key
+    queryFn: () => fetchCharacters(page, name),
+    staleTime: 1000 * 60,
+    placeholderData: (prevData) => prevData,
   })
 }

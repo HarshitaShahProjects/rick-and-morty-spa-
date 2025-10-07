@@ -20,8 +20,12 @@ export type CharactersResponse = {
   results: Character[]
 }
 
-export async function fetchCharacters(page = 1): Promise<CharactersResponse> {
-  const res = await fetch(`${BASE}/character?page=${page}`)
+export async function fetchCharacters(page: number, name?: string): Promise<CharactersResponse> {
+  const url = new URL('https://rickandmortyapi.com/api/character')
+  url.searchParams.append('page', String(page))
+  if (name) url.searchParams.append('name', name)
+
+  const res = await fetch(url.toString())
   if (!res.ok) throw new Error('Failed to fetch characters')
   return res.json()
 }
